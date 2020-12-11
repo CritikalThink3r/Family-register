@@ -8,10 +8,9 @@ public class Person {
     private  String name;
     private String surname;
     private  String dateOfBirth;
-    private static int age;
     LocalDate Dob;
 
-    static ArrayList<Person> personlist = new ArrayList<>();
+    private static ArrayList<Person> personlist = new ArrayList<>();
 
     Person (String name, String surname, String dateOfBirth){
         this.name = name;
@@ -19,6 +18,37 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
     }
     Person(){}
+
+    public void getPersonlist() {
+        if(personlist.isEmpty()){
+            System.out.println("Database empty");
+        }else{
+            System.out.println(personlist);
+        }
+    }
+
+    // used in the family class
+    public ArrayList<Person> arrayPerson() {
+        return personlist;
+    }
+
+    // add person to arraylist at the same time add person to family array if family name
+    // is not already in the array
+    public void addPersonTo(Person person){
+        Family family = new Family();
+        family.addFamily(person.getSurname());
+        personlist.add(person);
+    }
+
+   private static int calAge(LocalDate Dob){
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(Dob, currentDate).getYears();
+    }
+
+    private int getAge() {
+        Dob = LocalDate.parse(getDateOfBirth());
+        return calAge(Dob);
+    }
 
     public String getName() {
         return name;
@@ -32,36 +62,10 @@ public class Person {
         return dateOfBirth;
     }
 
-    static int calAge(LocalDate Dob){
-        LocalDate currentDate = LocalDate.now();
-        age = Period.between(Dob,currentDate).getYears();
-        return age;
-    }
-
-    public void getPersonlist() {
-        if(personlist.isEmpty()){
-            System.out.println("Database empty");
-            return;
-        }else{
-            System.out.println(personlist);
-        }
-    }
-
-    public int getAge() {
-        Dob = LocalDate.parse(dateOfBirth);
-        return calAge(Dob);
-    }
-
-    public ArrayList<Person> arrayPerson() {
-    return personlist;
-    }
-
-    public void addPersonTo(Person person){
-       personlist.add(person);
-    }
 
     @Override
     public String toString() {
-        return "name='" + name +", surname='" + surname + ", dateOfBirth=" + dateOfBirth + ", age=" + getAge();
+        return "name='" + name +", surname='" + surname + ", dateOfBirth=" + getDateOfBirth()
+                + ", age=" +getAge() + "\n";
     }
 }

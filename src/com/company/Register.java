@@ -55,7 +55,7 @@ public class Register {
     }
     }
 
-    public void ifEmptyString(String string){
+    private void ifEmptyString(String string){
 
         while(string.trim().isEmpty()){
             System.out.println("cannot be empty!");
@@ -65,7 +65,6 @@ public class Register {
 
     // adding a person to an arrayList in the person class
     private void addPerson(){
-
 
         System.out.println("Enter your name");
         String name = scan.nextLine();
@@ -87,12 +86,12 @@ public class Register {
         p.getPersonlist();
     }
 
-    public void listFamily(){
+    private void listFamily(){
         family.getArrayOfFamily();
     }
 
-    public void familyRegistry(){
-        family.putPeopleToMap();
+    private void familyRegistry(){
+        System.out.println(family.getFamilyTree().entrySet());
     }
 
 }

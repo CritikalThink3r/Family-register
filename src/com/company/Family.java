@@ -2,13 +2,13 @@ package com.company;
 
 import java.util.*;
 
-public class Family implements Comparable{
+public class Family implements Comparable<Family>{
 
     private String surname;
 
 
-    private static final TreeMap<Family,List<Person>> familyTree = new TreeMap<>();
-   private static final List<Family> arrayOfFamily = new ArrayList<>();
+    private static  TreeMap<Family,List<Person>> familyTree = new TreeMap<>();
+   private static  List<Family> arrayOfFamily = new ArrayList<>();
 
     Person p = new Person();
 
@@ -17,61 +17,88 @@ public class Family implements Comparable{
     }
     public Family(){}
 
-    public void addToArraL(Family family){
+
+
+    /*Iterator iter = (Iterator) familyTree.keySet().iterator();
+
+        while(iter.hasNext()) {
+
+        Map.Entry entry = (Map.Entry) iter.next();
+        System.out.println(entry.getKey() + " - " + entry.getValue());
+
+    }*/
+    // add the people to their respective families.
+    private void putPeopleToMap() {
+        if (familyTree.isEmpty()) {
+            for (Person person : p.arrayPerson()) {
+                for (Family family : arrayOfFamily) {
+                    if (family.getSurname().equalsIgnoreCase(person.getSurname())) {
+                        List<Person> people = new ArrayList<>();
+                        people.add(person);
+                        familyTree.put(family, people);
+                    }
+                }
+            }
+        } else {
+            for (Map.Entry<Family, List<Person>> map : familyTree.entrySet()) {
+                for (Person person : p.arrayPerson()) {
+                    for (Family family : arrayOfFamily) {
+                        List<Person> people = map.getValue();
+                        if (familyTree.containsKey(family)) {
+                            if (family.getSurname().equalsIgnoreCase(person.getSurname())) {
+                                people.add(person);
+                                familyTree.put(family, people);
+                            }
+                        } else {
+                            if (!familyTree.containsKey(family)) {
+
+                                if (family.getSurname().equalsIgnoreCase(person.getSurname())) {
+                                    people.add(person);
+                                    familyTree.put(family, people);
+
+
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        if (familyTree.isEmpty()) {
+            System.out.println("Entry empty");
+        }
+
+    }
+
+
+    // this is used in the person class while a person object is created create a family object from that person
+    // if the surname exits in the arraylist dont add
+    public void addFamily (String surname){
+        for (Family family1 : arrayOfFamily){
+            if(family1.surname.equalsIgnoreCase(surname)){
+                System.out.println("family exists");
+                return;
+            }
+        }
+        Family family = new Family(surname);
         arrayOfFamily.add(family);
     }
 
-    // get all teh people from the people arayList in hte person class and add them (their surname) to
-    // family arrayList
-    public void findPerson(){
-        for(Person k: p.arrayPerson()){
-            for(Family f: arrayOfFamily){
-                if(f.surname.contains(k.getSurname())){
-                    return;
-                }
-            }
-                    Family fam = new Family(k.getSurname());
-                    addToArraL(fam);
-        }
+    public Map<Family,List<Person>> getFamilyTree() {
+        putPeopleToMap();
+        return familyTree;
     }
 
-    // list familyies in the arayList
-    public void getArrayOfFamily() {
-        findPerson();
-        if(arrayOfFamily.isEmpty()){
+    public void getArrayOfFamily(){
+        if (arrayOfFamily.isEmpty() && p.arrayPerson().isEmpty()){
             System.out.println("Database empty");
         }else{
             System.out.println(arrayOfFamily);
         }
     }
 
-    // add the people to their respective families.
-    public void putPeopleToMap(){
-        if(p.arrayPerson().isEmpty() & arrayOfFamily.isEmpty()){
-            System.out.println("no family in registry");
-            return;
-        }
-        findPerson();
-        List<Person> per = new ArrayList<>();
-
-            if(familyTree.isEmpty()){
-                for(Person a: Person.personlist){
-                    for(Family fam: arrayOfFamily){
-                        if(fam.getSurname().equalsIgnoreCase(a.getSurname())){
-                            Family f = fam;
-                            per.add(a);
-                            familyTree.put(f,per);
-
-                            System.out.println(familyTree.entrySet());
-                        }
-                    }
-                }
-            }
-    }
-
-    public TreeMap<Family, List<Person>> getFamilyTree() {
-        return familyTree;
-    }
 
     public String getSurname() {
         return surname;
@@ -84,16 +111,22 @@ public class Family implements Comparable{
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if(obj instanceof Family){
+            Family k = (Family)obj;
+            return  k.surname.equals(surname);
+        }else{
+
+            return false;
+        }
     }
 
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(Family o) {
+        return o.surname.compareToIgnoreCase(surname);
     }
 
     @Override
     public String toString() {
-        return "surname='" + surname + " "+ p +" \n";
+        return "\n surname='" + surname;
     }
 }
