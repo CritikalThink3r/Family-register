@@ -45,6 +45,10 @@ public class Register {
                     listFamily();
                     break;
 
+            case"List":
+                peopleWithSameName(entered);
+
+
                 case"Exit":
                     done = true;
                     break;
@@ -76,6 +80,7 @@ public class Register {
 
         System.out.println("Enter your date of birth i the format, YYYY-mm-dd");
         String dateOfBirth = scan.nextLine();
+        //anothe method that checks if the string is in the right format.
 
         Person person = new Person(name,surname,dateOfBirth);
         p.addPersonTo(person);
@@ -94,4 +99,13 @@ public class Register {
         System.out.println(family.getFamilyTree().entrySet());
     }
 
+    public void peopleWithSameName(String surname) {
+        for (Map.Entry<Family, List<Person>> map : family.getFamilyTree().entrySet()) {
+            if (surname.equalsIgnoreCase(map.getKey().getSurname())) {
+                System.out.println(map.getValue());
+            } else {
+                System.out.println("Surname not in register");
+            }
+        }
+    }
 }

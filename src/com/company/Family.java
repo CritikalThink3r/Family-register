@@ -7,8 +7,8 @@ public class Family implements Comparable<Family>{
     private String surname;
 
 
-    private static  TreeMap<Family,List<Person>> familyTree = new TreeMap<>();
-   private static  List<Family> arrayOfFamily = new ArrayList<>();
+    private static final TreeMap<Family,List<Person>> familyTree = new TreeMap<>();
+   private static  final List<Family> arrayOfFamily = new ArrayList<>();
 
     Person p = new Person();
 
@@ -17,61 +17,46 @@ public class Family implements Comparable<Family>{
     }
     public Family(){}
 
-
-
-    /*Iterator iter = (Iterator) familyTree.keySet().iterator();
-
-        while(iter.hasNext()) {
-
-        Map.Entry entry = (Map.Entry) iter.next();
-        System.out.println(entry.getKey() + " - " + entry.getValue());
-
-    }*/
-    // add the people to their respective families.
+    // add the people from the person arrayList to their respective families in the Map.
     private void putPeopleToMap() {
+        addObjectWhenMapIsEmpty();
+        addObjectToListThatExist();
+
         if (familyTree.isEmpty()) {
-            for (Person person : p.arrayPerson()) {
-                for (Family family : arrayOfFamily) {
-                    if (family.getSurname().equalsIgnoreCase(person.getSurname())) {
+            System.out.println("Entry empty");
+        }
+    }
+
+    //loop through the list of people and add the person to the arrayList that belongs to that key
+    private void addObjectToListThatExist() {
+
+        for (Map.Entry<Family, List<Person>> entry : familyTree.entrySet()) {
+            List<Person> listAllPeople = entry.getValue();
+            Family family = entry.getKey();
+            for (Person peopleInArray : p.arrayPerson()) {
+                if (family.surname.equalsIgnoreCase(peopleInArray.getSurname()) &&
+                        !listAllPeople.contains(peopleInArray)) {
+
+                    listAllPeople.add(peopleInArray);
+                }
+            }
+        }
+    }
+
+    // add a family to the map with a person when the map is empty from the start
+    private void addObjectWhenMapIsEmpty() {
+        for (Person person : p.arrayPerson()) {
+            for (Family family : arrayOfFamily) {
+                if (familyTree.isEmpty() || !familyTree.containsKey(family)) {
+                    if (family.surname.equalsIgnoreCase(person.getSurname())) {
                         List<Person> people = new ArrayList<>();
                         people.add(person);
                         familyTree.put(family, people);
                     }
                 }
             }
-        } else {
-            for (Map.Entry<Family, List<Person>> map : familyTree.entrySet()) {
-                for (Person person : p.arrayPerson()) {
-                    for (Family family : arrayOfFamily) {
-                        List<Person> people = map.getValue();
-                        if (familyTree.containsKey(family)) {
-                            if (family.getSurname().equalsIgnoreCase(person.getSurname())) {
-                                people.add(person);
-                                familyTree.put(family, people);
-                            }
-                        } else {
-                            if (!familyTree.containsKey(family)) {
-
-                                if (family.getSurname().equalsIgnoreCase(person.getSurname())) {
-                                    people.add(person);
-                                    familyTree.put(family, people);
-
-
-                                }
-
-                            }
-                        }
-
-                    }
-                }
-            }
         }
-        if (familyTree.isEmpty()) {
-            System.out.println("Entry empty");
-        }
-
     }
-
 
     // this is used in the person class while a person object is created create a family object from that person
     // if the surname exits in the arraylist dont add
@@ -86,6 +71,7 @@ public class Family implements Comparable<Family>{
         arrayOfFamily.add(family);
     }
 
+    //
     public Map<Family,List<Person>> getFamilyTree() {
         putPeopleToMap();
         return familyTree;
@@ -98,7 +84,6 @@ public class Family implements Comparable<Family>{
             System.out.println(arrayOfFamily);
         }
     }
-
 
     public String getSurname() {
         return surname;

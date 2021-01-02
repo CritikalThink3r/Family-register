@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public class Person {
     private  String name;
-    private String surname;
+    private  String surname;
     private  String dateOfBirth;
     LocalDate Dob;
 
-    private static ArrayList<Person> personlist = new ArrayList<>();
+    private static final ArrayList<Person> personlist = new ArrayList<>();
 
     Person (String name, String surname, String dateOfBirth){
         this.name = name;
